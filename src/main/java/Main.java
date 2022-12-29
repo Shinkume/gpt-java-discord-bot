@@ -1,26 +1,20 @@
 import com.theokanning.openai.OpenAiService;
 import com.theokanning.openai.moderation.ModerationRequest;
-import com.theokanning.openai.moderation.ModerationResult;
 import net.dv8tion.jda.api.JDABuilder;
-import net.dv8tion.jda.api.entities.Guild;
-import net.dv8tion.jda.api.events.message.GenericMessageEvent;
+import net.dv8tion.jda.api.events.guild.GuildReadyEvent;
+import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
-import net.dv8tion.jda.api.sharding.DefaultShardManagerBuilder;
-import net.dv8tion.jda.api.sharding.ShardManager;
 
 import javax.security.auth.login.LoginException;
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.util.EventListener;
 import java.util.Scanner;
 
 public class Main extends ListenerAdapter {
 
     private static JDABuilder builder;
-    private static Guild guild;
-
+    private boolean chatting = false;
     public static void main(String[] args) throws FileNotFoundException, LoginException
     {
        File file = new File("tokens.txt");
@@ -35,9 +29,7 @@ public class Main extends ListenerAdapter {
         builder = JDABuilder.createDefault(discordtoken);
         builder.build();
 
-        guild.upsertCommand("chat","starts a new conversation with the openai chatbot!");
-       /*ModerationRequest request = new ModerationRequest();
-       ModerationResult result = new ModerationResult();*/
+       ModerationRequest request = new ModerationRequest();
 
     }
 
@@ -45,6 +37,19 @@ public class Main extends ListenerAdapter {
     public void onMessageReceived(MessageReceivedEvent event)
     {
 
+    }
+
+    @Override
+    public void onGuildReady(GuildReadyEvent event) {
+        event.getGuild().upsertCommand("chat","Allows the user to interact with the gpt-3 chatbot!").queue();
+    }
+
+    @Override
+    public void onSlashCommandInteraction(SlashCommandInteractionEvent event) {
+        if(event.getCommandString().equals("chat"))
+        {
+
+        }
     }
 
 }
