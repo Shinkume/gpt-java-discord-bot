@@ -1,2 +1,2 @@
-DiscordBotToken=111111
-OpenaiKey=111111111
+DiscordBotToken=x
+OpenaiKey=x
