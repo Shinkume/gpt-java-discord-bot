@@ -18,11 +18,15 @@ public class Interaction extends ListenerAdapter {
     @Override
     public void onMessageReceived(MessageReceivedEvent event)
     {
+        if(event.getAuthor().isBot()) return;
+        System.out.println("a");
+
         if(chatting && event.getChannel() instanceof ThreadChannel)
         {
             if(!(event.getChannel().asThreadChannel().getName().equals("chat"))) return;
             //reminder to add moderation and openai completion
             String message = event.getMessage().getContentRaw();
+            System.out.println(message);
             ModerationRequest request = new ModerationRequest();
             request.setInput(message);
             Moderation moderation = Main.service.createModeration(request).getResults().get(0);
@@ -33,15 +37,17 @@ public class Interaction extends ListenerAdapter {
                 return;
             }else
             {
-                Main.thread += event.getAuthor() + "#" + event.getAuthor().getAsTag() + ": " + message + "\n";
+                Main.thread += event.getAuthor().getName()  + ": " + message + "\n";
                 Main.thread += "You: ";
                 CompletionRequest completionRequest = new CompletionRequest();
                 completionRequest.setPrompt(Main.thread);
                 completionRequest.setMaxTokens(250);
-                completionRequest.setModel("davinci-003");
+                completionRequest.setModel("text-davinci-003");
                 completionRequest.setTemperature(0.9);
                 String response =  Main.service.createCompletion(completionRequest).getChoices().get(0).getText();
                 event.getChannel().sendMessage(response).queue();
+                Main.thread += response + "\n";
+                System.out.println(Main.thread);
             }
 
         }
@@ -61,6 +67,7 @@ public class Interaction extends ListenerAdapter {
 
     @Override
     public void onSlashCommandInteraction(SlashCommandInteractionEvent event) {
+        if(event.getUser().isBot()) return;
         if(event.getName().equals("chat"))
         {
             //reminder to add moderation and openai completion
@@ -84,14 +91,16 @@ public class Interaction extends ListenerAdapter {
                     }
                 }
                 event.getChannel().asTextChannel().createThreadChannel("chat").queue();
-                Main.thread += event.getUser() + "#" + event.getUser().getAsTag() + ": " + message + "\n";
+                Main.thread += event.getUser().getName() +  ": " + message + "\n";
                 Main.thread += "You: ";
                 CompletionRequest completionRequest = new CompletionRequest();
                 completionRequest.setPrompt(Main.thread);
                 completionRequest.setMaxTokens(250);
-                completionRequest.setModel("davinci-003");
+                completionRequest.setModel("text-davinci-003");
                 completionRequest.setTemperature(0.9);
                 String response =  Main.service.createCompletion(completionRequest).getChoices().get(0).getText();
+                Main.thread += response + "\n";
+                System.out.println(Main.thread);
                 ThreadChannel channel = null;
                 for(ThreadChannel thread : event.getChannel().asTextChannel().getThreadChannels())
                 {
