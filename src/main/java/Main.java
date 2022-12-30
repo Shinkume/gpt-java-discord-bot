@@ -21,10 +21,10 @@ import java.nio.file.Path;
 import java.util.Scanner;
 
 public class Main extends ListenerAdapter {
-    private static String thread;
+    public static String thread;
     private static JDABuilder builder;
     private boolean chatting = false;
-    private static OpenAiService service;
+    public static OpenAiService service;
     public static void main(String[] args) throws IOException, LoginException, FileNotFoundException
     {
        File file = new File("tokens.txt");
@@ -38,7 +38,8 @@ public class Main extends ListenerAdapter {
         service = new OpenAiService(openaikey);
         builder = JDABuilder.createDefault(discordtoken);
         builder.build();
-        File file1 = new File("config.yaml");
+        builder.addEventListeners(new Interaction());
+        File file1 = new File("prompt.txt");
         Scanner scanner = new Scanner(file1);
         for(int i = 0; i < Files.lines(Path.of("prompt.txt")).count();i++)
         {
@@ -138,6 +139,7 @@ public class Main extends ListenerAdapter {
                       event.reply("I am already in a thread, sorry!").setEphemeral(true).queue();
                       return;
                   }
+
         }
     }
 
