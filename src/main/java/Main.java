@@ -12,12 +12,12 @@ import java.nio.file.Path;
 import java.util.Scanner;
 
 public class Main extends ListenerAdapter {
-    public static String thread;
     private static JDABuilder builder;
     public static OpenAiService service;
     public static int maxTokens;
     public static int messageLimit;
     public static int maxMessageLength;
+    public static String prompt;
     public static void main(String[] args) throws IOException, LoginException, FileNotFoundException
     {
         File file = new File("tokens.txt");
@@ -43,10 +43,11 @@ public class Main extends ListenerAdapter {
         Scanner scanner = new Scanner(file1);
         for(int i = 0; i < Files.lines(Path.of("prompt.txt")).count();i++)
         {
-            thread += scanner.nextLine() + "\n";
+
+            prompt += scanner.nextLine() + "\n";
         }
 
-        System.out.println(thread);
+
     }
 
 }
