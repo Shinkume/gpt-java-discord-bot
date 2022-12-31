@@ -14,7 +14,6 @@ import java.util.Scanner;
 public class Main extends ListenerAdapter {
     public static String thread;
     private static JDABuilder builder;
-    private boolean chatting = false;
     public static OpenAiService service;
     public static int maxTokens;
     public static int messageLimit;
@@ -34,9 +33,12 @@ public class Main extends ListenerAdapter {
         builder.addEventListeners(new Interaction());
         builder.enableIntents(GatewayIntent.MESSAGE_CONTENT);
         builder.build();
-        maxTokens = sc.nextInt();
-        messageLimit = sc.nextInt();
-        maxMessageLength = sc.nextInt();
+        String line3 = sc.next();
+        maxTokens = Integer.parseInt(line3.substring(10));
+        String line4 = sc.next();
+        messageLimit = Integer.parseInt(line4.substring(13));
+        String line5 = sc.next();
+        maxMessageLength = Integer.parseInt(line5.substring(17));
         File file1 = new File("prompt.txt");
         Scanner scanner = new Scanner(file1);
         for(int i = 0; i < Files.lines(Path.of("prompt.txt")).count();i++)

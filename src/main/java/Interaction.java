@@ -13,6 +13,7 @@ import net.dv8tion.jda.api.interactions.commands.build.Commands;
 
 public class Interaction extends ListenerAdapter {
     private boolean chatting;
+    private int messages;
     @Override
     public void onMessageReceived(MessageReceivedEvent event)
     {
@@ -46,7 +47,12 @@ public class Interaction extends ListenerAdapter {
                     event.getMessage().reply("Your message is too long!").queue();
                     return;
                 }
-
+                if(messages >= Main.messageLimit)
+                {
+                    event.getMessage().reply("I have reached the maximum amount of messages you can send me!").queue();
+                    event.getChannel().asThreadChannel().delete();
+                }
+                messages++;
                 Main.thread += event.getAuthor().getName()  + ": " + message + "\n";
                 Main.thread += "You: ";
                 CompletionRequest completionRequest = new CompletionRequest();
@@ -113,7 +119,7 @@ public class Interaction extends ListenerAdapter {
                     event.reply("Your message is too long!").setEphemeral(true).queue();
                     return;
                 }
-
+                messages++;
                 event.getChannel().asTextChannel().createThreadChannel("chat").queue();
                 Main.thread += event.getUser().getName() +  ": " + message + "\n";
                 Main.thread += "You: ";
