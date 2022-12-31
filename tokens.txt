@@ -1,2 +1,5 @@
 DiscordBotToken=x
 OpenaiKey=x
+maxTokens=250
+messageLimit=10
+maxMessageLength=50

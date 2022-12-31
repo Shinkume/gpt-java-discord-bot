@@ -16,6 +16,9 @@ public class Main extends ListenerAdapter {
     private static JDABuilder builder;
     private boolean chatting = false;
     public static OpenAiService service;
+    public static int maxTokens;
+    public static int messageLimit;
+    public static int maxMessageLength;
     public static void main(String[] args) throws IOException, LoginException, FileNotFoundException
     {
         File file = new File("tokens.txt");
@@ -31,6 +34,9 @@ public class Main extends ListenerAdapter {
         builder.addEventListeners(new Interaction());
         builder.enableIntents(GatewayIntent.MESSAGE_CONTENT);
         builder.build();
+        maxTokens = sc.nextInt();
+        messageLimit = sc.nextInt();
+        maxMessageLength = sc.nextInt();
         File file1 = new File("prompt.txt");
         Scanner scanner = new Scanner(file1);
         for(int i = 0; i < Files.lines(Path.of("prompt.txt")).count();i++)
@@ -40,5 +46,5 @@ public class Main extends ListenerAdapter {
 
         System.out.println(thread);
     }
-    
+
 }
